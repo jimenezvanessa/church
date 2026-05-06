@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     const songs = await Song.find(query).sort(sortQuery).lean();
     return NextResponse.json(songs);
   } catch (error) {
+    console.error('Songs API error:', error);
     return NextResponse.json({ error: 'Failed to fetch songs' }, { status: 500 });
   }
 }
