@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root {
+  --dark-blue: #0B1F3A;
+  --blue: #1E3A8A;
+  --light-blue: #3B82F6;
+  --white: #FFFFFF;
+  --soft-gray: #E5E7EB;
+}
+
+@theme inline {
+  --color-dark-blue: var(--dark-blue);
+  --color-blue: var(--blue);
+  --color-light-blue: var(--light-blue);
+  --color-white: var(--white);
+  --color-soft-gray: var(--soft-gray);
+}
+
+body {
+  background: var(--dark-blue);
+  color: var(--white);
+  font-family: Inter, Poppins, Roboto, sans-serif;
+}
