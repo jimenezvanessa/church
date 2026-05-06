@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Church Slides",
   description: "Church Lyrics Auto-Slide Generator",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
