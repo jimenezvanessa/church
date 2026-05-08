@@ -20,6 +20,7 @@ export default function PresentationViewer() {
   const [presentation, setPresentation] = useState<Presentation | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showBack, setShowBack] = useState(false);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -84,6 +85,19 @@ export default function PresentationViewer() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextSlide, prevSlide, router]);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (e.clientY < 100) {
+        setShowBack(true);
+      } else {
+        setShowBack(false);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-blue flex items-center justify-center">
@@ -112,7 +126,11 @@ export default function PresentationViewer() {
 
   return (
     <div className="min-h-screen bg-dark-blue flex flex-col">
-      <div className="fixed top-4 left-4 z-50">
+      <div 
+        className={`fixed top-4 left-4 z-50 transition-opacity duration-300 ${
+          showBack ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+      >
         <Link
           href="/"
           className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-gray-300 hover:text-white transition-all duration-200"
@@ -123,30 +141,10 @@ export default function PresentationViewer() {
 
       <div className="flex-1 flex items-center justify-center p-12">
         <div className="max-w-4xl w-full">
-          <div className="text-center mb-4 text-gray-400">
-            {currentSlide} / {presentation.slides.length}
-          </div>
           <div className={`${fontSize} font-bold text-center leading-relaxed whitespace-pre-wrap animate-fade-in`}>
             {currentText}
           </div>
         </div>
-      </div>
-
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-4">
-        <button
-          onClick={prevSlide}
-          disabled={currentSlide <= 1}
-          className="px-6 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl transition-all duration-200"
-        >
-          ← Previous
-        </button>
-        <button
-          onClick={nextSlide}
-          disabled={currentSlide === presentation.slides.length - 1}
-          className="px-6 py-3 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed rounded-xl transition-all duration-200"
-        >
-          Next →
-        </button>
       </div>
     </div>
   );

@@ -7,10 +7,14 @@ export async function GET(request: NextRequest) {
     await dbConnect();
     const search = request.nextUrl.searchParams.get('search');
     const sort = request.nextUrl.searchParams.get('sort') || 'title';
+    const category = request.nextUrl.searchParams.get('category');
     
     let query = {};
     if (search) {
       query = { title: { $regex: search, $options: 'i' } };
+    }
+    if (category && ['hymnal', 'praise'].includes(category)) {
+      query = { ...query, category };
     }
 
     let sortQuery = {};

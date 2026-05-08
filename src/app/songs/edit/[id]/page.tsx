@@ -8,6 +8,7 @@ interface Song {
   _id: string;
   title: string;
   lyrics: string;
+  category: string;
 }
 
 export default function EditSong() {
@@ -15,6 +16,7 @@ export default function EditSong() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [lyrics, setLyrics] = useState('');
+  const [category, setCategory] = useState('hymnal');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -26,6 +28,7 @@ export default function EditSong() {
           const data: Song = await res.json();
           setTitle(data.title);
           setLyrics(data.lyrics);
+          setCategory(data.category || 'hymnal');
         } else {
           router.push('/');
         }
@@ -47,7 +50,7 @@ export default function EditSong() {
       await fetch(`/api/songs/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, lyrics }),
+        body: JSON.stringify({ title, lyrics, category }),
       });
       
       router.push('/');
@@ -85,6 +88,34 @@ export default function EditSong() {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-4 py-3 rounded-2xl bg-white/10 border border-soft-gray/20 text-white focus:outline-none focus:ring-2 focus:ring-light-blue"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Category</label>
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                onClick={() => setCategory('hymnal')}
+                className={`py-4 rounded-2xl font-medium transition-all duration-200 ${
+                  category === 'hymnal'
+                    ? 'bg-blue text-white'
+                    : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                }`}
+              >
+                Hymnal Song
+              </button>
+              <button
+                type="button"
+                onClick={() => setCategory('praise')}
+                className={`py-4 rounded-2xl font-medium transition-all duration-200 ${
+                  category === 'praise'
+                    ? 'bg-blue text-white'
+                    : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                }`}
+              >
+                Praise & Worship
+              </button>
+            </div>
           </div>
 
           <div>

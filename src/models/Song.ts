@@ -10,6 +10,11 @@ const SongSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    enum: ['hymnal', 'praise'],
+    default: 'hymnal',
+  },
   createdAt: {
     type: Date,
     default: Date.now,
