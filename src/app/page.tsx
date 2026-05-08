@@ -14,7 +14,7 @@ interface Song {
 function SongCard({ song, onDelete }: { song: Song; onDelete: (id: string) => void }) {
   return (
     <div className="bg-white/10 rounded-2xl p-4 shadow-lg hover:bg-white/15 transition-all duration-200">
-      <h3 className="text-lg font-bold mb-2 truncate">{song.title}</h3>
+      <h3 className="text-base md:text-lg font-bold mb-2 truncate">{song.title}</h3>
       <p className="text-gray-400 text-sm mb-4 line-clamp-2">
         {song.lyrics.substring(0, 80)}...
       </p>
@@ -35,7 +35,7 @@ function SongCard({ song, onDelete }: { song: Song; onDelete: (id: string) => vo
           onClick={() => onDelete(song._id)}
           className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-xl text-sm transition-all duration-200"
         >
-          Delete
+          Del
         </button>
       </div>
     </div>
@@ -88,32 +88,32 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Song Library</h1>
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl font-bold">Song Library</h1>
           <Link 
             href="/songs/new"
-            className="bg-blue hover:bg-light-blue px-6 py-3 rounded-2xl font-medium transition-all duration-200"
+            className="w-full sm:w-auto bg-blue hover:bg-light-blue px-6 py-3 rounded-2xl font-medium transition-all duration-200 text-center"
           >
             + Add Song
           </Link>
         </div>
 
-        <div className="flex gap-3 mb-4 bg-white/10 p-4 rounded-2xl border border-white/10">
+        <div className="flex gap-3 mb-4 bg-white/10 p-3 md:p-4 rounded-2xl border border-white/10">
           <input
             type="text"
             placeholder="Search songs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-light-blue"
+            className="flex-1 w-full px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-light-blue"
           />
         </div>
 
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-4 md:mb-8 overflow-x-auto pb-2">
           <button
             onClick={() => setSort('title')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
               sort === 'title' ? 'bg-blue text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
             }`}
           >
@@ -121,7 +121,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => setSort('A-Z')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
               sort === 'A-Z' ? 'bg-blue text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
             }`}
           >
@@ -129,7 +129,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => setSort('0-9')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap ${
               sort === '0-9' ? 'bg-blue text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'
             }`}
           >
@@ -140,9 +140,9 @@ export default function Home() {
         {loading ? (
           <div className="text-center py-12">Loading...</div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-bold mb-6">Hymnal Songs</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+            <div className="bg-white/5 rounded-2xl p-4 md:p-6 border border-white/10">
+              <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Hymnal Songs</h2>
               <div className="space-y-4">
                 {filterBySort(songs.filter(s => (!s.category || s.category === 'hymnal') && s.title.toLowerCase().includes(searchLower))).length === 0 ? (
                   <p className="text-gray-400">No hymnal songs</p>
@@ -153,8 +153,8 @@ export default function Home() {
                 )}
               </div>
             </div>
-            <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-              <h2 className="text-2xl font-bold mb-6">Praise & Worship</h2>
+            <div className="bg-white/5 rounded-2xl p-4 md:p-6 border border-white/10">
+              <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Praise & Worship</h2>
               <div className="space-y-4">
                 {filterBySort(songs.filter(s => s.category === 'praise' && s.title.toLowerCase().includes(searchLower))).length === 0 ? (
                   <p className="text-gray-400">No praise & worship songs</p>

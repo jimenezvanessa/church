@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -21,6 +21,8 @@ export default function PresentationViewer() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showBack, setShowBack] = useState(false);
+  const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -98,6 +100,32 @@ export default function PresentationViewer() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchEndX - touchStartX.current;
+    const diffY = touchEndY - touchStartY.current;
+    
+    if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
+    } else if (Math.abs(diffX) < 10 && Math.abs(diffY) < 10) {
+      if (touchEndX > window.innerWidth / 2) {
+        nextSlide();
+      } else {
+        prevSlide();
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-blue flex items-center justify-center">
@@ -112,12 +140,12 @@ export default function PresentationViewer() {
 
   const currentText = presentation.slides[currentSlide - 1] || '';
   const lineCount = currentText.split('\n').length;
-  const fontSize = lineCount <= 3 ? 'text-6xl md:text-7xl' : lineCount <= 5 ? 'text-5xl md:text-6xl' : 'text-3xl md:text-4xl';
+  const fontSize = lineCount <= 3 ? 'text-3xl md:text-5xl lg:text-6xl xl:text-7xl' : lineCount <= 5 ? 'text-2xl md:text-4xl lg:text-5xl' : 'text-lg md:text-2xl lg:text-3xl';
 
   if (currentSlide === 0) {
     return (
-      <div className="min-h-screen bg-dark-blue flex flex-col items-center justify-center">
-        <h1 className="text-6xl md:text-8xl font-bold text-center text-white">
+      <div className="min-h-screen bg-dark-blue flex flex-col items-center justify-center p-4">
+        <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold text-center text-white">
           {presentation.title}
         </h1>
       </div>
@@ -125,7 +153,11 @@ export default function PresentationViewer() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-blue flex flex-col">
+    <div 
+      className="min-h-screen bg-dark-blue flex flex-col"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       <div 
         className={`fixed top-4 left-4 z-50 transition-opacity duration-300 ${
           showBack ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -139,7 +171,7 @@ export default function PresentationViewer() {
         </Link>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-12">
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12">
         <div className="max-w-4xl w-full">
           <div className={`${fontSize} font-bold text-center leading-relaxed whitespace-pre-wrap animate-fade-in`}>
             {currentText}

@@ -63,23 +63,23 @@ export default function EditSong() {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-8 flex items-center justify-center">
+      <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
         Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col items-center gap-6 mb-8">
-          <Link href="/" className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-gray-300 hover:text-white transition-all duration-200 absolute left-8 top-8">
+        <div className="flex flex-col items-center gap-4 md:gap-6 mb-6 md:mb-8">
+          <Link href="/" className="self-start px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl text-gray-300 hover:text-white transition-all duration-200 absolute left-4 top-4 md:left-8 md:top-8 z-10">
             ← Back
           </Link>
-          <h1 className="text-4xl font-bold">Edit Song</h1>
+          <h1 className="text-2xl md:text-4xl font-bold pt-8 md:pt-0">Edit Song</h1>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
             <label className="block text-sm font-medium mb-2">Song Title</label>
             <input
@@ -96,24 +96,24 @@ export default function EditSong() {
               <button
                 type="button"
                 onClick={() => setCategory('hymnal')}
-                className={`py-4 rounded-2xl font-medium transition-all duration-200 ${
+                className={`py-3 md:py-4 rounded-2xl font-medium transition-all duration-200 ${
                   category === 'hymnal'
                     ? 'bg-blue text-white'
                     : 'bg-white/10 text-gray-300 hover:bg-white/20'
                 }`}
               >
-                Hymnal Song
+                Hymnal
               </button>
               <button
                 type="button"
                 onClick={() => setCategory('praise')}
-                className={`py-4 rounded-2xl font-medium transition-all duration-200 ${
+                className={`py-3 md:py-4 rounded-2xl font-medium transition-all duration-200 ${
                   category === 'praise'
                     ? 'bg-blue text-white'
                     : 'bg-white/10 text-gray-300 hover:bg-white/20'
                 }`}
               >
-                Praise & Worship
+                Praise
               </button>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function EditSong() {
             <textarea
               value={lyrics}
               onChange={(e) => setLyrics(e.target.value)}
-              rows={12}
+              rows={8}
               className="w-full px-4 py-3 rounded-2xl bg-white/10 border border-soft-gray/20 text-white focus:outline-none focus:ring-2 focus:ring-light-blue resize-none font-mono"
             />
           </div>

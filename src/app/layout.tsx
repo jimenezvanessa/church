@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Church Slides",
   description: "Church Lyrics Auto-Slide Generator",
   manifest: "/manifest.json",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+  themeColor: "#0B1F3A",
 };
 
 export default function RootLayout({
