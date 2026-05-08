@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Presentation from '@/models/Presentation';
+import Song from '@/models/Song';
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,19 +9,18 @@ export async function GET(request: NextRequest) {
     const songId = request.nextUrl.searchParams.get('songId');
     
     if (songId) {
-      const presentation = await Presentation.findOne({ songId })
-        .populate('songId', 'title lyrics')
-        .lean();
+      const song = await Song.findById(songId).select('title lyrics').lean();
+      if (!song) {
+        return NextResponse.json({ error: 'Song not found' }, { status: 404 });
+      }
+      const presentation = await Presentation.findOne({ songId }).lean();
       if (!presentation) {
         return NextResponse.json({ error: 'Presentation not found' }, { status: 404 });
       }
-      return NextResponse.json(presentation);
+      return NextResponse.json({ ...presentation, songId: { title: song.title, lyrics: song.lyrics } });
     }
     
-    const presentations = await Presentation.find()
-      .populate('songId', 'title lyrics')
-      .sort({ createdAt: -1 })
-      .lean();
+    const presentations = await Presentation.find().sort({ createdAt: -1 }).lean();
     return NextResponse.json(presentations);
   } catch (error) {
     console.error('Presentations API error:', error);
