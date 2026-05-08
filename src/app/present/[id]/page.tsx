@@ -128,7 +128,7 @@ export default function PresentationViewer() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-blue flex items-center justify-center">
+      <div className="min-h-screen bg-dark-blue flex items-center justify-center touch-none">
         <div className="text-2xl">Loading...</div>
       </div>
     );
@@ -144,7 +144,11 @@ export default function PresentationViewer() {
 
   if (currentSlide === 0) {
     return (
-      <div className="min-h-screen bg-dark-blue flex flex-col items-center justify-center p-4">
+      <div 
+        className="min-h-screen bg-dark-blue flex flex-col items-center justify-center p-4 touch-none"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <h1 className="text-3xl md:text-6xl lg:text-8xl font-bold text-center text-white">
           {presentation.title}
         </h1>
@@ -154,7 +158,7 @@ export default function PresentationViewer() {
 
   return (
     <div 
-      className="min-h-screen bg-dark-blue flex flex-col"
+      className="min-h-screen bg-dark-blue flex flex-col touch-none"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
